@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -109,8 +110,8 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        ArrayList<ArrayList<NumberTriangle>> inputs = new ArrayList<>();
+        int counter = 0;
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -120,10 +121,33 @@ public class NumberTriangle {
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
+            String[] values = line.split(" ");
+            System.out.println(values.length);
+            ArrayList<NumberTriangle> list = new ArrayList<>();
+            for (int i = 0; i < values.length; i++) {
+                System.out.println(inputs.toArray().length);
+                String value = values[i];
+                NumberTriangle triangle = new NumberTriangle(Integer.parseInt(value));
+                list.add(triangle);
+                if (counter > 0) {
+                    if (i == 0) {
+                        NumberTriangle parent = inputs.get(counter - 1).get(0);
+                        parent.setLeft(triangle);
+                    }
+                    else if (i == values.length - 1) {
+                        NumberTriangle parent = inputs.get(counter - 1).get(i - 1);
+                        parent.setRight(triangle);
+                    }
+                    else {
+                        NumberTriangle leftParent = inputs.get(counter - 1).get(i - 1);
+                        leftParent.setLeft(triangle);
+                        NumberTriangle rightParent = inputs.get(counter - 1).get(i);
+                        rightParent.setRight(triangle);
+                    }
+                }
+            }
+            inputs.add(list);
+            counter++;
             //read the next line
             line = br.readLine();
         }
