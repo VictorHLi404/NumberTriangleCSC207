@@ -89,8 +89,15 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if (path.isEmpty()) {
+            return root;
+        }
+        if (path.charAt(0) == 'l') {
+            return left.retrieve(path.substring(1));
+        }
+        else {
+            return right.retrieve(path.substring(1));
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -122,12 +129,13 @@ public class NumberTriangle {
 
             // remove when done; this line is included so running starter code prints the contents of the file
             String[] values = line.split(" ");
-            System.out.println(values.length);
             ArrayList<NumberTriangle> list = new ArrayList<>();
             for (int i = 0; i < values.length; i++) {
-                System.out.println(inputs.toArray().length);
                 String value = values[i];
                 NumberTriangle triangle = new NumberTriangle(Integer.parseInt(value));
+                if (top == null) {
+                    top = triangle;
+                }
                 list.add(triangle);
                 if (counter > 0) {
                     if (i == 0) {
@@ -140,9 +148,9 @@ public class NumberTriangle {
                     }
                     else {
                         NumberTriangle leftParent = inputs.get(counter - 1).get(i - 1);
-                        leftParent.setLeft(triangle);
+                        leftParent.setRight(triangle);
                         NumberTriangle rightParent = inputs.get(counter - 1).get(i);
-                        rightParent.setRight(triangle);
+                        rightParent.setLeft(triangle);
                     }
                 }
             }
